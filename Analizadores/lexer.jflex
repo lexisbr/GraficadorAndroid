@@ -13,148 +13,85 @@ import parser.sym;
 %cupdebug
 %line
 %column
-%unicode
 
-LineTerminator = [\r|\n|\r\n]
+//caracteres y separadores
+SEPARADORES = [ \r\t\b\f\n]
 
-SEPARADOR = {LineTerminator} | [ \t\f]
-
-ENTERO = ([0-9]+)
-
+//reservadas
+ENTERO = [0-9]+
 PARENTESIS_A = "("
-
 PARENTESIS_C = ")"
-
 COLOR = ("azul" | "rojo" | "verde" | "amarillo" | "naranja" | "morado" | "cafe" | "negro" )
-
-
+SUMA = "+"
+RESTA = "-"
+MULTI = "*"
+DIVISION = "/"
+CIRCULO = "circulo"
+CUADRADO = "cuadrado"
+RECTANGULO = "rectangulo"
+LINEA = "linea"
+POLIGONO = "poligono"
+GRAFICAR = "graficar"
 COMA = ","
 
+
+
 %{
-    private List<String> errorsList;
+
+	private List<String> errorsList;
 %}
 
-
 %{
-    private Symbol symbol(int type, String lexeme, String tipo){
-        System.out.printf("\n >>>| Lexema: %s | Tipo: %s | Linea: %d | Columna: %d |<<< %n", lexeme == null ? "":lexeme,type,yyline+1,yycolumn+1);
-        return new Symbol(type, new Token(lexeme, yyline+1, yycolumn+1));
-    }
-
-    private Symbol symbol(int type){
+	private Symbol symbol(int type) {
         String lexeme = yytext();
-        System.out.printf("Token tipo %d, lexema %s, columna %d\n", type, lexeme == null ? "":lexeme, yyline+1, yycolumn+1);
-        return new Symbol(type, new Token(lexeme,yyline+1,yycolumn+1));
+        System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
+        return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
     }
 
-    private void error(String lexeme){
-        System.out.printf("Error lexico en: %s Linea %d, Columna %d. %n", lexeme, yyline+1,yycolumn+1);
-        errorsList.add(String.format("Error lexico en: %s Linea %d, Columna %d. Corrija e intente de nuevo.", lexeme, yyline+1, yycolumn+1));
+    private Symbol symbol(int type, String lexeme) {
+        System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
+        return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
     }
 
-    public List<String> getErrorsList(){
+    private void error(String lexeme) {
+        System.out.printf("Error Lexico en el Texto: %s  linea %d,  columna %d. \n", lexeme, yyline + 1, yycolumn + 1);
+            errorsList.add(String.format("Error Lexico en el Texto: %s  linea %d, columna %d. Corrige e intenta de nuevo.", lexeme, yyline + 1, yycolumn + 1));
+    }
+    public List<String> getErrorsList() {
         return errorsList;
     }
 %}
-
 %init{
-        errorsList = new ArrayList<>();
+    errorsList = new ArrayList<>();
 %init}
 
 %%
 
-<YYINITIAL>{
-    
-    "+"
-    {
-        symbol(SUMA,yytext(),"OPERADOR");
-    }
-    "-"
-    {
-        symbol(RESTA,yytext(),"OPERADOR");
-    }
-    "*"
-    {
-        symbol(MULTIPLICACION,yytext(),"OPERADOR");
-    }
-    "/"
-    {
-        symbol(DIVISION,yytext(),"OPERADOR");
-    }
-    "circulo"
-    {
-        symbol(CIRCULO,yytext(),"FIGURA");
-    }
-    "cuadrado"
-    {
-        symbol(CUADRADO,yytext(),"FIGURA");
-    }
-    "rectangulo"
-    {
-        symbol(RECTANGULO,yytext(),"FIGURA");
-    }
-    "linea"
-    {
-        symbol(LINEA,yytext(),"FIGURA");
-    }
-    "poligono"
-    {
-        symbol(POLIGONO,yytext(),"FIGURA");
-    }
-    "graficar"
-    {
-        symbol(GRAFICAR,yytext(),"PALABRA RESERVADA");
-    }
-    "animar"
-    {
-        symbol(ANIMAR,yytext(),"PALABRA RESERVADA");
-    }
-    "objeto"
-    {
-        symbol(OBJETO,yytext(),"PALABRA RESERVADA");
-    }
-    "anterior"
-    {
-        symbol(ANTERIOR,yytext(),"PALABRA RESERVADA");
-    }
-    "curva"
-    {
-        symbol(CURVA,yytext(),"PALABRA RESERVADA");
-    }
-    {ENTERO}
-    {
-        symbol(ENTERO,yytext(),"ENTERO");
-    }
-    {COLOR}
-    {
-        symbol(COLOR,yytext(),"COLOR");
-    }
-    {COMA}
-    {
-        symbol(COMA,yytext(),"COMA");
-    }
+/* reglas lexicas */
+<YYINITIAL> {
     {PARENTESIS_A}
-    {
-        symbol(PARENTESIS_A,yytext(),"PARENTESIS");
-    }
+		{System.out.printf(" PARENTESIS: %s\n", yytext()); return  symbol(PARENTESIS_A, yytext());}
     {PARENTESIS_C}
-    {
-        symbol(PARENTESIS_C,yytext(),"PARENTESIS");
-    }
-
-    {SEPARADOR}
-    {
-        /* IGNORAR */
-    }
+		{System.out.printf(" PARENTESIS: %s\n", yytext()); return  symbol(PARENTESIS_C, yytext());}
+    {PARENTESIS_A}
+		{System.out.printf(" PARENTESIS: %s\n", yytext()); return  symbol(PARENTESIS_A, yytext());}
+    {CUADRADO}
+		{System.out.printf(" CUADRADO: %s\n", yytext()); return  symbol(CUADRADO, yytext());}
+    {GRAFICAR}
+        {System.out.printf(" GRAFICAR: %s\n", yytext()); return  symbol(GRAFICAR, yytext());}
+    {COMA}
+        {System.out.printf(" COMA: %s\n", yytext()); return  symbol(COMA, yytext());}
+    {ENTERO}
+        {System.out.printf(" ENTERO: %s\n", yytext()); return  symbol(ENTERO, yytext());}
+    {COLOR}
+        {System.out.printf(" COLOR: %s\n", yytext()); return  symbol(COLOR, yytext());}
+	{SEPARADORES}
+	 	{/* los ignoramos */}
 }
 
+/* Error por cualquier otro simbolo*/
 [^]
-{
-    error(yytext());
-    return symbol(error, yytext(),"ERROR");
-}
+		{ error(yytext()); return symbol(error, yytext());}
 
 <<EOF>>
-{
-    return symbol(EOF);
-}
+		{ return symbol(EOF); }

@@ -5,61 +5,57 @@ import java.util.List;
 import java_cup.runtime.*;
 import lexer.*;
 
+//agregar biblioteca cup como dependencia en android studio
+// https://developer.android.com/studio/projects/android-library?hl=es
+
 parser code {:
+
     private List<String> errorsList;
+	public Parser(Lexer lex) {
+		super(lex);
+		this.errorsList = new ArrayList();
+	}
+	@Override
+        public void syntax_error(Symbol st) {
+        	Token token = (Token) st.value;
+            report_error("Error Sintactico con el  Token:"+ token.getLexeme()+" este no pertenece a la estructura - linea: "+token.getLine()+" - columna: "+token.getColumn() + "\n",null);
 
-    public Parser(Lexer lex){
-        super(lex);
-        this.errorsList = new ArrayList();
-    }
-    @Override
-    public void syntax_error(Symbol st){
-        Token token = (Token) st.value;
-        report_error("Error Sintactico con el Token:"+ token.getLexeme() + " este no pertenece a la estructura - linea: " + token.getLine() + "- columna: "+ token.getColumn() + "\n", null);
+            System.out.println("Error Sintactico con el Token: " + token.getLexeme() + " este no pertenece a la estructura - linea: " + token.getLine() + ", columna: " + token.getColumn());
+                    errorsList.add(String.format("Error Sintactico con el Token: '%s' este no pertenece a la estructura- linea: %d  columna: %d. Corrige e intenta de nuevo.", token.getLexeme(), token.getLine(), token.getColumn()));
+        }
 
-        System.out.println("Error Sintactico con el Token: " + token.getLexeme() + " este no pertenece a la estructura - linea: " + token.getLine() + ", columna: " + token.getColumn());
-        errorsList.add(String.format("Error Sintactico con el Token: '%s' este no pertenece a la estructura- linea: %d  columna: %d. Corrige e intenta de nuevo.", token.getLexeme(), token.getLine(), token.getColumn()));
-    }
-:}
+	    //retorna list de errores sintacticos
+        public List<String> getErrorsList(){
+	        return errorsList
+	        ;
+	    }
 
-terminal Token SUMA,RESTA,MULTIPLICACION,DIVISION,CIRCULO,CUADRADO,
-RECTANGULO,LINEA,POLIGONO,GRAFICAR,ANIMAR,OBJETO,ANTERIOR,ENTERO,
-COLOR,CURVA,COMA,PARENTESIS_A,PARENTESIS_C;
+:};
 
-non terminal a,b,c,d,e,f;
+/* Terminals (tokens returned by the scanner). */
+terminal Token	GRAFICAR;
+terminal Token	CUADRADO;
+terminal Token	PARENTESIS_C;
+terminal Token	PARENTESIS_A;
+terminal Token	COMA;
+terminal Token  ENTERO;
+terminal Token  COLOR;
 
-start with a;
-a ::= GRAFICAR b {: System.out.printf("Inicia"); :}
-    | error:err {: System.out.printf("Error en expresion %s \n",(String) err); :}
+
+/* Non-Terminals (created scanner). */
+non terminal  inicio, aver;
+
+/* The grammar : */
+
+start with inicio;
+inicio ::= aver
+        | error	{:
+            System.out.println("Error en expresion");
+        :}
 ;
 
-b ::= CIRCULO PARENTESIS_A c COMA c COMA c COMA COLOR:color PARENTESIS_C e {: System.out.printf("Graficar un circulo color %s \n",color.getLexeme()); :}
-    | CUADRADO PARENTESIS_A c COMA c COMA c COMA COLOR:color PARENTESIS_C e {: System.out.printf("Graficar un cuadrado color %s \n",color.getLexeme()); :}
-    | RECTANGULO PARENTESIS_A c COMA c COMA c COMA c COMA COLOR:color PARENTESIS_C  e {: System.out.printf("Graficar un rectangulo color %s \n",color.getLexeme()); :}
-    | LINEA PARENTESIS_A c COMA c COMA c COMA COLOR:color PARENTESIS_C  e {: System.out.printf("Graficar un linea color %s \n",color.getLexeme());; :}
-    | POLIGONO PARENTESIS_A c COMA c COMA c COMA c COMA c COMA COLOR:color PARENTESIS_C  e {: System.out.printf("Graficar un poligono color %s \n",color.getLexeme()); :}
-    | error:err {: System.out.printf("Error en expresion %s \n",(String) err); :}
+aver ::= GRAFICAR CUADRADO PARENTESIS_A ENTERO COMA ENTERO COMA ENTERO COMA COLOR PARENTESIS_C {:
+            System.out.println("Graficar cuadrado");
+        :}
 ;
-
-c ::= ENTERO d
-    | PARENTESIS_A c PARENTESIS_C d
-;
-
-d ::= SUMA c {: System.out.printf("Se encontro un operador" ); :}
-    | RESTA c {: System.out.printf("Se encontro un operador" ); :}
-    | MULTIPLICACION c {: System.out.printf("Se encontro un operador" ); :}
-    | DIVISION c {: System.out.printf("Se encontro un operador" ); :}
-    |
-;
-
-e ::= ANIMAR OBJETO ANTERIOR PARENTESIS_A c COMA c COMA f PARENTESIS_C a
-    | a
-    |
-;
-
-f  ::= CURVA
-    | LINEA
-;
-
-
 
