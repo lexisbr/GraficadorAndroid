@@ -1,0 +1,7 @@
+graficar poligono (12+2,12 , 55+5 * 5 ,12,5/5,amarillo) 
+animar objeto anterior amarillo
+linea curva
+cuadrado rectangulo rectanAS
+dd
+df CUADRADO
+cuadrado
