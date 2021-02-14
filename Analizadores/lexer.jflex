@@ -141,6 +141,7 @@ COMA = ","
     {
         symbol(PARENTESIS_C,yytext(),"PARENTESIS");
     }
+
     {SEPARADOR}
     {
         /* IGNORAR */
