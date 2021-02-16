@@ -1,7 +1,6 @@
 public class Token {
 
     private final String lexeme;
-    private final String type;
     private final int line;
     private final int column;
 
