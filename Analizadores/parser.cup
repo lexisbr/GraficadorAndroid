@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java_cup.runtime.*;
 import lexer.*;
+import objetos.*;
+
 
 //agregar biblioteca cup como dependencia en android studio
 // https://developer.android.com/studio/projects/android-library?hl=es
@@ -11,6 +13,9 @@ import lexer.*;
 parser code {:
 
     private List<String> errorsList;
+    private Animacion animacion;
+    private Graficador graficador = new Graficador();
+    private boolean errores=false;
 	public Parser(Lexer lex) {
 		super(lex);
 		this.errorsList = new ArrayList();
@@ -18,15 +23,23 @@ parser code {:
 	@Override
     public void syntax_error(Symbol st) {
         Token token = (Token) st.value;
-        report_error("Error Sintactico con el Token:"+ token.getLexeme()+" este no pertenece a la estructura - linea: "+token.getLine()+" - columna: "+token.getColumn() + "\n",null);
+        report_error("Error Sintactico con el Token:"+ token.getLexeme()+" este no pertenece a la estructura  >linea: "+token.getLine()+" >columna: "+token.getColumn() + "\n",null);
 
         //System.out.println("Error Sintactico con el Token: " + token.getLexeme() + " este no pertenece a la estructura - linea: " + token.getLine() + ", columna: " + token.getColumn());
-        errorsList.add(String.format("Error Sintactico con el Token: '%s' este no pertenece a la estructura- linea: %d  columna: %d. Corrige e intenta de nuevo.", token.getLexeme(), token.getLine(), token.getColumn()));
+        errorsList.add(String.format("Error Sintactico con el Token: '%s' este no pertenece a la estructura >linea: %d  >columna: %d. Corrige e intenta de nuevo.", token.getLexeme(), token.getLine(), token.getColumn()));
     }
 
     //retorna list de errores sintacticos
     public List<String> getErrorsList(){
         return errorsList;
+    }
+
+    public Graficador getGraficador(){
+        return graficador;
+    }
+
+    public boolean getErrores(){
+        return errores;
     }
 
 :};
@@ -54,8 +67,10 @@ terminal Token  CURVA;
 
 
 /* Non-Terminals (created scanner). */
-non terminal  inicio, a, b, c, e, f;
-non terminal Integer d;
+non terminal  inicio, a, b;
+non terminal Integer d,c;
+non terminal Animacion e,g;
+non terminal Token f;
 precedence left SUMA, RESTA;
 precedence left MULTI, DIVISION;
 
@@ -63,48 +78,68 @@ precedence left MULTI, DIVISION;
 
 start with inicio;
 inicio ::= a
-        | error a 
+        | error a {: errores = true; :}
 ;
 
 a ::= GRAFICAR b a
     |
 ;
 
-b ::= CUADRADO PARENTESIS_A c COMA c COMA c COMA COLOR:color PARENTESIS_C e {:
-            System.out.printf("Graficar cuadrado %s \n",color.getLexeme());
+b ::= CUADRADO PARENTESIS_A c:posx COMA c:posy COMA c:lon COMA COLOR:color PARENTESIS_C e:animacion {:
+            /*System.out.printf("Graficar cuadrado %s \n",color.getLexeme());*/
+            Cuadrado figura = new Cuadrado(lon,color.getLexeme(),posx,posy,animacion);
+            graficador.addFigure(figura);
         :}
-    | CIRCULO PARENTESIS_A c COMA c COMA c COMA COLOR PARENTESIS_C  e {:
-            System.out.printf("Graficar circulo\n");
+    | CIRCULO PARENTESIS_A c:posx COMA c:posy COMA c:radio COMA COLOR:color PARENTESIS_C  e:animacion {:
+            /*System.out.printf("Graficar circulo\n");*/
+            Circulo figura = new Circulo(radio,color.getLexeme(),posx,posy,animacion);
+            graficador.addFigure(figura);
         :}
-    | RECTANGULO PARENTESIS_A c COMA c COMA c COMA c COMA COLOR PARENTESIS_C e {:
-            System.out.printf("Graficar rectangulo\n");
+    | RECTANGULO PARENTESIS_A c:posx COMA c:posy COMA c:alto COMA c:ancho COMA COLOR:color PARENTESIS_C e:animacion {:
+            /*System.out.printf("Graficar rectangulo\n");*/
+            Rectangulo figura = new Rectangulo(alto,ancho,color.getLexeme(),posx,posy,animacion);
+            graficador.addFigure(figura);
         :}
-    | LINEA PARENTESIS_A c COMA c COMA c COMA c COMA COLOR PARENTESIS_C  e {:
-            System.out.printf("Graficar linea\n");
+    | LINEA PARENTESIS_A c:posx COMA c:posy COMA c:posx2 COMA c:posy2 COMA COLOR:color PARENTESIS_C  e:animacion {:
+            /*System.out.printf("Graficar linea\n");*/
+            Linea figura = new Linea(posx2,posy2,color.getLexeme(),posx,posy,animacion);
+            graficador.addFigure(figura);
         :}
-    | POLIGONO PARENTESIS_A c COMA c COMA c COMA c COMA c COMA COLOR PARENTESIS_C  e {:
-            System.out.printf("Graficar poligono\n");
+    | POLIGONO PARENTESIS_A c:posx COMA c:posy COMA c:alto COMA c:ancho COMA c:cantidad COMA COLOR:color PARENTESIS_C  e:animacion {:
+            /*System.out.printf("Graficar poligono\n");*/
+            Poligono figura = new Poligono(alto,ancho,cantidad,color.getLexeme(),posx,posy,animacion);
+            graficador.addFigure(figura);
         :}
-    | error	
+    | error	e {: errores = true; :}
 ;
 
-c ::= d:resultado {: System.out.printf("Resultado FINAL: %d \n",resultado); :}
+c ::= d:resultado {: RESULT = resultado; /*System.out.printf("Resultado FINAL: %d \n",resultado);*/ :}
+    | error {: errores = true; :}
 ;
 
-d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); System.out.printf("Resultado suma: %d\n",RESULT); :}
-    | d:e1 RESTA d:e2 {: RESULT = new Integer(e1.intValue()-e2.intValue()); System.out.printf("Resultado resta: %d\n",RESULT); :}
-    | d:e1 MULTI d:e2 {:  RESULT = new Integer(e1.intValue()*e2.intValue()); System.out.printf("Resultado multiplicacion: %d\n",RESULT); :}
-    | d:e1 DIVISION d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue()); System.out.printf("Resultado division: %d\n",RESULT); :}
-    | ENTERO:e1 {:  RESULT = new Integer(Integer.parseInt(e1.getLexeme())); System.out.printf("Numero: %d\n",RESULT ); :}
-    | PARENTESIS_A d:e1 PARENTESIS_C {: RESULT = e1; System.out.printf("Resultado parentesis: %d\n",RESULT ); :}
-    | error 
+d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* System.out.printf("Resultado suma: %d\n",RESULT);*/ :}
+    | d:e1 RESTA d:e2 {: RESULT = new Integer(e1.intValue()-e2.intValue()); /* System.out.printf("Resultado resta: %d\n",RESULT);*/ :}
+    | d:e1 MULTI d:e2 {:  RESULT = new Integer(e1.intValue()*e2.intValue()); /* System.out.printf("Resultado multiplicacion: %d\n",RESULT);*/ :}
+    | d:e1 DIVISION d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue()); /* System.out.printf("Resultado division: %d\n",RESULT);*/ :}
+    | ENTERO:e1 {:  RESULT = new Integer(Integer.parseInt(e1.getLexeme())); /*System.out.printf("Numero: %d\n",RESULT );*/ :}
+    | PARENTESIS_A d:e1 PARENTESIS_C {: RESULT = e1; /*System.out.printf("Resultado parentesis: %d\n",RESULT );*/ :}
 ;
 
-e ::= ANIMAR OBJETO ANTERIOR PARENTESIS_A d COMA d COMA f PARENTESIS_C  {: System.out.printf("Se encontro una animacion \n" ); :}
-    |{: System.out.printf("No se hace animacion \n" ); :}
-    | error	
+e ::= ANIMAR g:anim {: RESULT = anim; /*System.out.printf("Se encontro una animacion \n" );*/ :}
+    |{: 
+        animacion = null;
+        RESULT  =  animacion;
+        /*System.out.printf("No se hace animacion \n" );*/ 
+    :}
 ;
 
-f  ::= CURVA
-    | LINEA
+g ::= OBJETO ANTERIOR PARENTESIS_A c:destinox COMA c:destinoy COMA f:tipo PARENTESIS_C {:
+        RESULT = new Animacion(destinox,destinoy,tipo.getLexeme());
+    :}
+    | error {: errores = true; :}
+;
+
+
+f  ::= CURVA:rest {: RESULT = rest; :}
+    | LINEA:rest {: RESULT = rest; :}
 ;
