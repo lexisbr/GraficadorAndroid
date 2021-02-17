@@ -110,11 +110,11 @@ b ::= CUADRADO PARENTESIS_A c:posx COMA c:posy COMA c:lon COMA COLOR:color PAREN
             Poligono figura = new Poligono(alto,ancho,cantidad,color.getLexeme(),posx,posy,animacion);
             graficador.addFigure(figura);
         :}
-    | error	e {: errores = true; :}
+    | error b {:  System.out.println("Error al graficar"); errores = true; :}
 ;
 
 c ::= d:resultado {: RESULT = resultado; /*System.out.printf("Resultado FINAL: %d \n",resultado);*/ :}
-    | error {: errores = true; :}
+    | error d {: System.out.println("Error al hacer operacion"); errores = true; :}
 ;
 
 d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* System.out.printf("Resultado suma: %d\n",RESULT);*/ :}
@@ -123,13 +123,14 @@ d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* 
     | d:e1 DIVISION d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue()); /* System.out.printf("Resultado division: %d\n",RESULT);*/ :}
     | ENTERO:e1 {:  RESULT = new Integer(Integer.parseInt(e1.getLexeme())); /*System.out.printf("Numero: %d\n",RESULT );*/ :}
     | PARENTESIS_A d:e1 PARENTESIS_C {: RESULT = e1; /*System.out.printf("Resultado parentesis: %d\n",RESULT );*/ :}
+    | error {: System.out.println("Error al hacer operacion"); errores = true; :}
 ;
 
 e ::= ANIMAR g:anim {: RESULT = anim; /*System.out.printf("Se encontro una animacion \n" );*/ :}
     |{: 
         animacion = null;
         RESULT  =  animacion;
-        /*System.out.printf("No se hace animacion \n" );*/ 
+        System.out.printf("No se hace animacion \n" ); 
     :}
 ;
 
@@ -143,3 +144,4 @@ g ::= OBJETO ANTERIOR PARENTESIS_A c:destinox COMA c:destinoy COMA f:tipo PARENT
 f  ::= CURVA:rest {: RESULT = rest; :}
     | LINEA:rest {: RESULT = rest; :}
 ;
+
