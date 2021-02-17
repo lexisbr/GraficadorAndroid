@@ -1,10 +1,10 @@
-package parser;
+package com.example.graficadorapp.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java_cup.runtime.*;
-import lexer.*;
-import objetos.*;
+import com.example.graficadorapp.lexer.*;
+import com.example.graficadorapp.objetos.*;
 
 
 //agregar biblioteca cup como dependencia en android studio
@@ -78,7 +78,7 @@ precedence left MULTI, DIVISION;
 
 start with inicio;
 inicio ::= a
-        | error a {: errores = true; :}
+    | error a {: errores = true; :}
 ;
 
 a ::= GRAFICAR b a
@@ -91,7 +91,6 @@ b ::= CUADRADO PARENTESIS_A c:posx COMA c:posy COMA c:lon COMA COLOR:color PAREN
             graficador.addFigure(figura);
         :}
     | CIRCULO PARENTESIS_A c:posx COMA c:posy COMA c:radio COMA COLOR:color PARENTESIS_C  e:animacion {:
-            /*System.out.printf("Graficar circulo\n");*/
             Circulo figura = new Circulo(radio,color.getLexeme(),posx,posy,animacion);
             graficador.addFigure(figura);
         :}
@@ -114,7 +113,7 @@ b ::= CUADRADO PARENTESIS_A c:posx COMA c:posy COMA c:lon COMA COLOR:color PAREN
 ;
 
 c ::= d:resultado {: RESULT = resultado; /*System.out.printf("Resultado FINAL: %d \n",resultado);*/ :}
-    | error d {: System.out.println("Error al hacer operacion"); errores = true; :}
+    | error {: errores = true; :}
 ;
 
 d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* System.out.printf("Resultado suma: %d\n",RESULT);*/ :}
@@ -123,14 +122,14 @@ d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* 
     | d:e1 DIVISION d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue()); /* System.out.printf("Resultado division: %d\n",RESULT);*/ :}
     | ENTERO:e1 {:  RESULT = new Integer(Integer.parseInt(e1.getLexeme())); /*System.out.printf("Numero: %d\n",RESULT );*/ :}
     | PARENTESIS_A d:e1 PARENTESIS_C {: RESULT = e1; /*System.out.printf("Resultado parentesis: %d\n",RESULT );*/ :}
-    | error {: System.out.println("Error al hacer operacion"); errores = true; :}
+    | error c {: errores = true; :} 
 ;
 
 e ::= ANIMAR g:anim {: RESULT = anim; /*System.out.printf("Se encontro una animacion \n" );*/ :}
     |{: 
         animacion = null;
         RESULT  =  animacion;
-        System.out.printf("No se hace animacion \n" ); 
+        /*System.out.printf("No se hace animacion \n" ); */
     :}
 ;
 
@@ -139,7 +138,6 @@ g ::= OBJETO ANTERIOR PARENTESIS_A c:destinox COMA c:destinoy COMA f:tipo PARENT
     :}
     | error {: errores = true; :}
 ;
-
 
 f  ::= CURVA:rest {: RESULT = rest; :}
     | LINEA:rest {: RESULT = rest; :}

@@ -20,10 +20,10 @@ public class Analizador {
 
     public static void main(String[] args) {
 
-        String entrada1 = "graficar circulo (25+123*8-5,15+56+66+(12+12)*7,45,rojo) graficar cuadrado(25,15-8+,45,rojo) graficar rectangulo graficar (12+(12),12,12,12,amarillo) "
-                + "graficar linea (12,12,12,12,amarillo) graficar poligono (12,12,12,12,12,amarillo) animar objeto anterior (55,55,curva)";
-        String entrada = "graficar + cuadrado (25+,25,25,rojo)";
-        StringReader reader = new StringReader(entrada);
+        String entrada1 = "graficar circulo (25+123*8-5,15+56+66+(12+12)*7,45,rojo) graficar cuadrado(25,15-8,45,rojo) graficar rectangulo (12+(12),12,12,12,amarillo) "
+                    + "graficar linea (12,12,12,12,amarillo) graficar poligono (12,12,12,12,12,amarillo) animar objeto anterior (55,55,curva)";
+        String entrada = "graficar circulo (25,15,15,verde)";
+        StringReader reader = new StringReader(entrada1);
 
         Lexer lex = new Lexer(reader);
         Parser parser = new Parser(lex);

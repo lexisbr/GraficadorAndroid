@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">GraficadorApp</string>
+    <string name="edit_message">Ingrese su codigo fuente</string>
+    <string name="button_send">Compilar</string>
+    <string name="graficador_title">Graficador</string>
+</resources>

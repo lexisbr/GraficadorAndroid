@@ -1,9 +1,10 @@
-package lexer;
+package com.example.graficadorapp.lexer;
 import java.util.ArrayList;
 import java.util.List;
 import java_cup.runtime.*;
-import static parser.sym.*;
-import parser.sym;
+import com.example.graficadorapp.parser.sym;
+import static com.example.graficadorapp.parser.sym.*;
+
 
 %%
 
