@@ -3,21 +3,18 @@
 // source: lexer.jflex
 
 package com.example.graficadorapp.lexer;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import java_cup.runtime.Scanner;
-import java_cup.runtime.Symbol;
+import java_cup.runtime.*;
 import com.example.graficadorapp.parser.sym;
-
 import static com.example.graficadorapp.parser.sym.*;
+import com.example.graficadorapp.reportes.ErrorToken;
 
 
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
-public class Lexer implements Scanner {
+public class Lexer implements java_cup.runtime.Scanner {
 
   /** This character denotes the end of file. */
   public static final int YYEOF = -1;
@@ -35,7 +32,7 @@ public class Lexer implements Scanner {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0, 0
+          0, 0
   };
 
   /**
@@ -44,7 +41,7 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_CMAP_TOP = zzUnpackcmap_top();
 
   private static final String ZZ_CMAP_TOP_PACKED_0 =
-    "\1\0\u10ff\u0100";
+          "\1\0\u10ff\u0100";
 
   private static int [] zzUnpackcmap_top() {
     int [] result = new int[4352];
@@ -72,12 +69,12 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\10\0\3\1\1\0\2\1\22\0\1\1\7\0\1\2"+
-    "\1\3\1\4\1\5\1\6\1\7\1\0\1\10\12\11"+
-    "\47\0\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
-    "\1\0\1\21\1\22\1\0\1\23\1\24\1\25\1\26"+
-    "\1\27\1\0\1\30\1\0\1\31\1\32\1\33\3\0"+
-    "\1\34\u0185\0";
+          "\10\0\3\1\1\0\2\1\22\0\1\1\7\0\1\2"+
+                  "\1\3\1\4\1\5\1\6\1\7\1\0\1\10\12\11"+
+                  "\47\0\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
+                  "\1\0\1\21\1\22\1\0\1\23\1\24\1\25\1\26"+
+                  "\1\27\1\0\1\30\1\0\1\31\1\32\1\33\3\0"+
+                  "\1\34\u0185\0";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[512];
@@ -104,10 +101,10 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
-    "\1\10\1\11\1\12\12\1\45\0\1\13\17\0\1\14"+
-    "\1\0\1\15\5\0\1\16\5\0\1\17\3\0\1\20"+
-    "\4\0\1\21\1\22\1\23\1\24\2\0\1\25";
+          "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
+                  "\1\10\1\11\1\12\12\1\45\0\1\13\17\0\1\14"+
+                  "\1\0\1\15\5\0\1\16\5\0\1\17\3\0\1\20"+
+                  "\4\0\1\21\1\22\1\23\1\24\2\0\1\25";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[104];
@@ -135,19 +132,19 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\35\0\35\0\35\0\35\0\35\0\35\0\35"+
-    "\0\35\0\35\0\72\0\127\0\164\0\221\0\256\0\313"+
-    "\0\350\0\u0105\0\u0122\0\u013f\0\u015c\0\u0179\0\u0196\0\u01b3"+
-    "\0\u01d0\0\u01ed\0\u020a\0\u0227\0\u0244\0\u0261\0\u027e\0\u029b"+
-    "\0\u02b8\0\u02d5\0\u02f2\0\u030f\0\u032c\0\u0349\0\u0366\0\u0383"+
-    "\0\u03a0\0\u03bd\0\u03da\0\u03f7\0\u0414\0\u0431\0\u044e\0\u046b"+
-    "\0\u0488\0\u04a5\0\u04c2\0\u04df\0\u04fc\0\u0519\0\u0536\0\u0553"+
-    "\0\u0570\0\u058d\0\35\0\u05aa\0\u05c7\0\u05e4\0\u0601\0\u061e"+
-    "\0\u063b\0\u0658\0\u0675\0\u0692\0\u06af\0\u06cc\0\u06e9\0\u0706"+
-    "\0\u0723\0\u0740\0\35\0\u075d\0\35\0\u077a\0\u0797\0\u07b4"+
-    "\0\u07d1\0\u07ee\0\35\0\u080b\0\u0828\0\u0845\0\u0862\0\u087f"+
-    "\0\35\0\u089c\0\u08b9\0\u08d6\0\35\0\u08f3\0\u0910\0\u092d"+
-    "\0\u094a\0\35\0\35\0\35\0\35\0\u0967\0\u0984\0\35";
+          "\0\0\0\35\0\35\0\35\0\35\0\35\0\35\0\35"+
+                  "\0\35\0\35\0\72\0\127\0\164\0\221\0\256\0\313"+
+                  "\0\350\0\u0105\0\u0122\0\u013f\0\u015c\0\u0179\0\u0196\0\u01b3"+
+                  "\0\u01d0\0\u01ed\0\u020a\0\u0227\0\u0244\0\u0261\0\u027e\0\u029b"+
+                  "\0\u02b8\0\u02d5\0\u02f2\0\u030f\0\u032c\0\u0349\0\u0366\0\u0383"+
+                  "\0\u03a0\0\u03bd\0\u03da\0\u03f7\0\u0414\0\u0431\0\u044e\0\u046b"+
+                  "\0\u0488\0\u04a5\0\u04c2\0\u04df\0\u04fc\0\u0519\0\u0536\0\u0553"+
+                  "\0\u0570\0\u058d\0\35\0\u05aa\0\u05c7\0\u05e4\0\u0601\0\u061e"+
+                  "\0\u063b\0\u0658\0\u0675\0\u0692\0\u06af\0\u06cc\0\u06e9\0\u0706"+
+                  "\0\u0723\0\u0740\0\35\0\u075d\0\35\0\u077a\0\u0797\0\u07b4"+
+                  "\0\u07d1\0\u07ee\0\35\0\u080b\0\u0828\0\u0845\0\u0862\0\u087f"+
+                  "\0\35\0\u089c\0\u08b9\0\u08d6\0\35\0\u08f3\0\u0910\0\u092d"+
+                  "\0\u094a\0\35\0\35\0\35\0\35\0\u0967\0\u0984\0\35";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[104];
@@ -173,32 +170,32 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11"+
-    "\1\12\1\13\1\14\1\2\1\15\3\2\1\16\2\2"+
-    "\1\17\1\20\1\21\1\22\1\23\1\24\2\2\1\25"+
-    "\1\2\46\0\1\13\47\0\1\26\1\27\6\0\1\30"+
-    "\12\0\1\31\6\0\1\32\10\0\1\33\32\0\1\34"+
-    "\25\0\1\35\41\0\1\36\20\0\1\37\3\0\1\40"+
-    "\31\0\1\41\47\0\1\42\24\0\1\43\7\0\1\44"+
-    "\24\0\1\45\30\0\1\46\43\0\1\47\7\0\1\50"+
-    "\35\0\1\51\21\0\1\52\45\0\1\53\16\0\1\54"+
-    "\15\0\1\55\16\0\1\56\47\0\1\57\37\0\1\60"+
-    "\34\0\1\61\24\0\1\62\36\0\1\63\35\0\1\64"+
-    "\25\0\1\65\42\0\1\66\42\0\1\67\34\0\1\70"+
-    "\30\0\1\71\26\0\1\72\41\0\1\73\27\0\1\73"+
-    "\32\0\1\74\35\0\1\75\52\0\1\76\20\0\1\77"+
-    "\33\0\1\100\30\0\1\101\34\0\1\102\52\0\1\66"+
-    "\22\0\1\103\37\0\1\104\44\0\1\105\31\0\1\73"+
-    "\23\0\1\52\40\0\1\106\25\0\1\107\52\0\1\110"+
-    "\36\0\1\111\32\0\1\112\16\0\1\113\43\0\1\114"+
-    "\25\0\1\115\37\0\1\66\44\0\1\116\40\0\1\117"+
-    "\23\0\1\120\26\0\1\121\45\0\1\122\41\0\1\123"+
-    "\25\0\1\124\36\0\1\125\23\0\1\126\36\0\1\127"+
-    "\42\0\1\130\40\0\1\131\34\0\1\132\33\0\1\133"+
-    "\32\0\1\66\37\0\1\134\34\0\1\135\23\0\1\136"+
-    "\31\0\1\137\34\0\1\73\47\0\1\140\27\0\1\141"+
-    "\44\0\1\142\32\0\1\143\36\0\1\144\32\0\1\145"+
-    "\40\0\1\146\25\0\1\147\37\0\1\150\6\0";
+          "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11"+
+                  "\1\12\1\13\1\14\1\2\1\15\3\2\1\16\2\2"+
+                  "\1\17\1\20\1\21\1\22\1\23\1\24\2\2\1\25"+
+                  "\1\2\46\0\1\13\47\0\1\26\1\27\6\0\1\30"+
+                  "\12\0\1\31\6\0\1\32\10\0\1\33\32\0\1\34"+
+                  "\25\0\1\35\41\0\1\36\20\0\1\37\3\0\1\40"+
+                  "\31\0\1\41\47\0\1\42\24\0\1\43\7\0\1\44"+
+                  "\24\0\1\45\30\0\1\46\43\0\1\47\7\0\1\50"+
+                  "\35\0\1\51\21\0\1\52\45\0\1\53\16\0\1\54"+
+                  "\15\0\1\55\16\0\1\56\47\0\1\57\37\0\1\60"+
+                  "\34\0\1\61\24\0\1\62\36\0\1\63\35\0\1\64"+
+                  "\25\0\1\65\42\0\1\66\42\0\1\67\34\0\1\70"+
+                  "\30\0\1\71\26\0\1\72\41\0\1\73\27\0\1\73"+
+                  "\32\0\1\74\35\0\1\75\52\0\1\76\20\0\1\77"+
+                  "\33\0\1\100\30\0\1\101\34\0\1\102\52\0\1\66"+
+                  "\22\0\1\103\37\0\1\104\44\0\1\105\31\0\1\73"+
+                  "\23\0\1\52\40\0\1\106\25\0\1\107\52\0\1\110"+
+                  "\36\0\1\111\32\0\1\112\16\0\1\113\43\0\1\114"+
+                  "\25\0\1\115\37\0\1\66\44\0\1\116\40\0\1\117"+
+                  "\23\0\1\120\26\0\1\121\45\0\1\122\41\0\1\123"+
+                  "\25\0\1\124\36\0\1\125\23\0\1\126\36\0\1\127"+
+                  "\42\0\1\130\40\0\1\131\34\0\1\132\33\0\1\133"+
+                  "\32\0\1\66\37\0\1\134\34\0\1\135\23\0\1\136"+
+                  "\31\0\1\137\34\0\1\73\47\0\1\140\27\0\1\141"+
+                  "\44\0\1\142\32\0\1\143\36\0\1\144\32\0\1\145"+
+                  "\40\0\1\146\25\0\1\147\37\0\1\150\6\0";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[2465];
@@ -233,9 +230,9 @@ public class Lexer implements Scanner {
    * {@link #ZZ_PUSHBACK_2BIG} respectively.
    */
   private static final String ZZ_ERROR_MSG[] = {
-    "Unknown internal scanner error",
-    "Error: could not match input",
-    "Error: pushback value was too large"
+          "Unknown internal scanner error",
+          "Error: could not match input",
+          "Error: pushback value was too large"
   };
 
   /**
@@ -244,9 +241,9 @@ public class Lexer implements Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\11\11\13\1\45\0\1\11\17\0\1\11\1\0"+
-    "\1\11\5\0\1\11\5\0\1\11\3\0\1\11\4\0"+
-    "\4\11\2\0\1\11";
+          "\1\0\11\11\13\1\45\0\1\11\17\0\1\11\1\0"+
+                  "\1\11\5\0\1\11\5\0\1\11\3\0\1\11\4\0"+
+                  "\4\11\2\0\1\11";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[104];
@@ -327,25 +324,29 @@ public class Lexer implements Scanner {
 
   /* user code: */
 
-	private List<String> errorsList;
-	private Symbol symbol(int type) {
-        String lexeme = yytext();
-        //System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
-        return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
-    }
+  private ArrayList<ErrorToken> errorsList = new ArrayList<>();
+  private Symbol symbol(int type) {
+    String lexeme = yytext();
+    //System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
+    return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
+  }
 
-    private Symbol symbol(int type, String lexeme) {
-        //System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
-        return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
-    }
+  private Symbol symbol(int type, String lexeme) {
+    //System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
+    return new Symbol(type, new Token(lexeme, yyline + 1, yycolumn + 1));
+  }
 
-    private void error(String lexeme) {
-        System.out.printf("Error Lexico en el Texto: %s  linea %d,  columna %d. \n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(String.format("Error Lexico en el Texto: %s  linea %d, columna %d. Corrige e intenta de nuevo.", lexeme, yyline + 1, yycolumn + 1));
-    }
-    public List<String> getErrorsList() {
-        return errorsList;
-    }
+  private void error(String lexeme) {
+    ErrorToken error = new ErrorToken(lexeme,yyline+1,yycolumn+1,"Simbolo no existe en el lenguaje","Lexico");
+    System.out.printf("Lexema: %s Linea: %s Columna: %s Descripcion: %s",error.getLexeme(),error.getLine(),error.getColumn(),error.getDescripcion());
+    errorsList.add(error);
+  }
+
+  public ArrayList<ErrorToken> getErrorsList(){
+    return errorsList;
+  }
+
+
 
 
   /**
@@ -354,7 +355,6 @@ public class Lexer implements Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public Lexer(java.io.Reader in) {
-      errorsList = new ArrayList<>();
     this.zzReader = in;
   }
 
@@ -379,8 +379,8 @@ public class Lexer implements Scanner {
       zzEndRead += zzFinalHighSurrogate;
       zzFinalHighSurrogate = 0;
       System.arraycopy(zzBuffer, zzStartRead,
-                       zzBuffer, 0,
-                       zzEndRead - zzStartRead);
+              zzBuffer, 0,
+              zzEndRead - zzStartRead);
 
       /* translate stored positions */
       zzEndRead -= zzStartRead;
@@ -406,7 +406,7 @@ public class Lexer implements Scanner {
     /* not supposed to occur according to specification of java.io.Reader */
     if (numRead == 0) {
       throw new java.io.IOException(
-          "Reader returned 0 characters. See JFlex examples/zero-reader for a workaround.");
+              "Reader returned 0 characters. See JFlex examples/zero-reader for a workaround.");
     }
     if (numRead > 0) {
       zzEndRead += numRead;
@@ -473,16 +473,16 @@ public class Lexer implements Scanner {
    * Resets the input position.
    */
   private final void yyResetPosition() {
-      zzAtBOL  = true;
-      zzAtEOF  = false;
-      zzCurrentPos = 0;
-      zzMarkedPos = 0;
-      zzStartRead = 0;
-      zzEndRead = 0;
-      zzFinalHighSurrogate = 0;
-      yyline = 0;
-      yycolumn = 0;
-      yychar = 0L;
+    zzAtBOL  = true;
+    zzAtEOF  = false;
+    zzCurrentPos = 0;
+    zzMarkedPos = 0;
+    zzStartRead = 0;
+    zzEndRead = 0;
+    zzFinalHighSurrogate = 0;
+    yyline = 0;
+    yycolumn = 0;
+    yychar = 0L;
   }
 
 
@@ -599,8 +599,8 @@ public class Lexer implements Scanner {
   private void zzDoEOF() throws java.io.IOException {
     if (!zzEOFDone) {
       zzEOFDone = true;
-    
-  yyclose();    }
+
+      yyclose();    }
   }
 
 
@@ -613,7 +613,7 @@ public class Lexer implements Scanner {
    * @return the next token.
    * @exception java.io.IOException if any I/O-Error occurs.
    */
-  @Override  public Symbol next_token() throws java.io.IOException {
+  @Override  public java_cup.runtime.Symbol next_token() throws java.io.IOException {
     int zzInput;
     int zzAction;
 
@@ -639,31 +639,31 @@ public class Lexer implements Scanner {
         zzCh = Character.codePointAt(zzBufferL, zzCurrentPosL, zzMarkedPosL);
         zzCharCount = Character.charCount(zzCh);
         switch (zzCh) {
-        case '\u000B':  // fall through
-        case '\u000C':  // fall through
-        case '\u0085':  // fall through
-        case '\u2028':  // fall through
-        case '\u2029':
-          yyline++;
-          yycolumn = 0;
-          zzR = false;
-          break;
-        case '\r':
-          yyline++;
-          yycolumn = 0;
-          zzR = true;
-          break;
-        case '\n':
-          if (zzR)
-            zzR = false;
-          else {
+          case '\u000B':  // fall through
+          case '\u000C':  // fall through
+          case '\u0085':  // fall through
+          case '\u2028':  // fall through
+          case '\u2029':
             yyline++;
             yycolumn = 0;
-          }
-          break;
-        default:
-          zzR = false;
-          yycolumn += zzCharCount;
+            zzR = false;
+            break;
+          case '\r':
+            yyline++;
+            yycolumn = 0;
+            zzR = true;
+            break;
+          case '\n':
+            if (zzR)
+              zzR = false;
+            else {
+              yyline++;
+              yycolumn = 0;
+            }
+            break;
+          default:
+            zzR = false;
+            yycolumn += zzCharCount;
         }
       }
 
@@ -749,117 +749,117 @@ public class Lexer implements Scanner {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-            zzDoEOF();
-              {
-                return symbol(EOF);
-              }
+        zzDoEOF();
+        {
+          return symbol(EOF);
+        }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { error(yytext()); return symbol(error, yytext());
-            }
-            // fall through
+          { error(yytext()); return symbol(error, yytext());
+          }
+          // fall through
           case 22: break;
           case 2:
-            { /* los ignoramos */
-            }
-            // fall through
+          { /* los ignoramos */
+          }
+          // fall through
           case 23: break;
           case 3:
-            { /*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_A, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_A, yytext());
+          }
+          // fall through
           case 24: break;
           case 4:
-            { /*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_C, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_C, yytext());
+          }
+          // fall through
           case 25: break;
           case 5:
-            { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(MULTI, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(MULTI, yytext());
+          }
+          // fall through
           case 26: break;
           case 6:
-            { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(SUMA, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(SUMA, yytext());
+          }
+          // fall through
           case 27: break;
           case 7:
-            { /*System.out.printf(" COMA: %s\n", yytext());*/ return  symbol(COMA, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COMA: %s\n", yytext());*/ return  symbol(COMA, yytext());
+          }
+          // fall through
           case 28: break;
           case 8:
-            { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(RESTA, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(RESTA, yytext());
+          }
+          // fall through
           case 29: break;
           case 9:
-            { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(DIVISION, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(DIVISION, yytext());
+          }
+          // fall through
           case 30: break;
           case 10:
-            { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(ENTERO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" ENTERO: %s\n", yytext());*/ return  symbol(ENTERO, yytext());
+          }
+          // fall through
           case 31: break;
           case 11:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(COLOR, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(COLOR, yytext());
+          }
+          // fall through
           case 32: break;
           case 12:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(CURVA, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(CURVA, yytext());
+          }
+          // fall through
           case 33: break;
           case 13:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(LINEA, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(LINEA, yytext());
+          }
+          // fall through
           case 34: break;
           case 14:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(ANIMAR, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(ANIMAR, yytext());
+          }
+          // fall through
           case 35: break;
           case 15:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(OBJETO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(OBJETO, yytext());
+          }
+          // fall through
           case 36: break;
           case 16:
-            { /*System.out.printf(" CIRCULO: %s\n", yytext());*/ return  symbol(CIRCULO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" CIRCULO: %s\n", yytext());*/ return  symbol(CIRCULO, yytext());
+          }
+          // fall through
           case 37: break;
           case 17:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(ANTERIOR, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(ANTERIOR, yytext());
+          }
+          // fall through
           case 38: break;
           case 18:
-            { /*System.out.printf(" CUADRADO: %s\n", yytext());*/ return  symbol(CUADRADO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" CUADRADO: %s\n", yytext());*/ return  symbol(CUADRADO, yytext());
+          }
+          // fall through
           case 39: break;
           case 19:
-            { /*System.out.printf(" GRAFICAR: %s\n", yytext());*/ return  symbol(GRAFICAR, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" GRAFICAR: %s\n", yytext());*/ return  symbol(GRAFICAR, yytext());
+          }
+          // fall through
           case 40: break;
           case 20:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(POLIGONO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(POLIGONO, yytext());
+          }
+          // fall through
           case 41: break;
           case 21:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(RECTANGULO, yytext());
-            }
-            // fall through
+          { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(RECTANGULO, yytext());
+          }
+          // fall through
           case 42: break;
           default:
             zzScanError(ZZ_NO_MATCH);
@@ -891,8 +891,8 @@ public class Lexer implements Scanner {
    * Same as next_token but also prints the token to standard out
    * for debugging.
    */
-  public Symbol debug_next_token() throws java.io.IOException {
-    Symbol s = next_token();
+  public java_cup.runtime.Symbol debug_next_token() throws java.io.IOException {
+    java_cup.runtime.Symbol s = next_token();
     System.out.println( "line:" + (yyline+1) + " col:" + (yycolumn+1) + " --"+ yytext() + "--" + getTokenName(s.sym) + "--");
     return s;
   }

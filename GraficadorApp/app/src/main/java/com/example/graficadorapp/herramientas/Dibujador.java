@@ -7,6 +7,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.view.View;
 
+
 import com.example.graficadorapp.objetos.Circulo;
 import com.example.graficadorapp.objetos.Cuadrado;
 import com.example.graficadorapp.objetos.Figura;
@@ -49,9 +50,6 @@ public class Dibujador extends View {
             if(figura instanceof Cuadrado){
                 Cuadrado forma = (Cuadrado) figura;
                 canvas.drawRect(x,y,x+forma.getLongitud_lado(),y+forma.getLongitud_lado(),pincel);
-              /*  for(int i = 0; i <= forma.getLongitud_lado(); i++){
-                    canvas.drawLine(x, y+i, x+forma.getLongitud_lado(), y+i, pincel);
-                }*/
             }else if(figura instanceof Circulo){
                 Circulo forma = (Circulo) figura;
                 canvas.drawCircle(x,y,forma.getRadio(),pincel);
@@ -62,7 +60,21 @@ public class Dibujador extends View {
                 pincel.setStrokeWidth(15);
                 Linea forma = (Linea) figura;
                 canvas.drawLine(x,y,forma.getPosicion_x2(),forma.getPosicion_y2(),pincel);
+            }else if(figura instanceof Poligono){
+                Poligono forma = (Poligono) figura;
+               // canvas.drawRect(x,y,forma.getAncho()+x,y+forma.getAlto(),pincel);
+
+                Path path = new Path();
+                path.moveTo(x,y);
+                float lado = (float) ((Math.PI / 2) / forma.getCantidad_lados());
+
+
+                for (int i =0; i< (forma.getCantidad_lados()-1); i++){
+                        path.lineTo(Float.parseFloat(String.valueOf(forma.getAncho() * Math.cos(lado*i)))+x, Float.parseFloat(String.valueOf(forma.getAlto() * Math.sin(lado*i)))+y);
+                }
+                canvas.drawPath(path,pincel);
             }
+
 
         }
 

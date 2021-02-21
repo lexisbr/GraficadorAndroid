@@ -4,6 +4,7 @@ import java.util.List;
 import java_cup.runtime.*;
 import com.example.graficadorapp.parser.sym;
 import static com.example.graficadorapp.parser.sym.*;
+import com.example.graficadorapp.reportes.ErrorToken;
 
 
 %%
@@ -42,7 +43,7 @@ CURVA = "curva"
 
 %{
 
-	private List<String> errorsList;
+	private ArrayList<ErrorToken> errorsList = new ArrayList<>();
 %}
 
 %{
@@ -58,16 +59,18 @@ CURVA = "curva"
     }
 
     private void error(String lexeme) {
-        System.out.printf("Error Lexico en el Texto: %s  linea %d,  columna %d. \n", lexeme, yyline + 1, yycolumn + 1);
-            errorsList.add(String.format("Error Lexico en el Texto: %s  linea %d, columna %d. Corrige e intenta de nuevo.", lexeme, yyline + 1, yycolumn + 1));
+       ErrorToken error = new ErrorToken(lexeme,yyline+1,yycolumn+1,"Simbolo no existe en el lenguaje","Lexico");
+       System.out.printf("Lexema: %s Linea: %s Columna: %s Descripcion: %s",error.getLexeme(),error.getLine(),error.getColumn(),error.getDescripcion());
+       errorsList.add(error);
     }
-    public List<String> getErrorsList() {
+
+    public ArrayList<ErrorToken> getErrorsList(){
         return errorsList;
     }
+
+
 %}
-%init{
-    errorsList = new ArrayList<>();
-%init}
+
 
 %%
 

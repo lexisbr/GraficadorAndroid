@@ -5,13 +5,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.style.TtsSpan;
 
 import com.example.graficadorapp.herramientas.Dibujador;
 import com.example.graficadorapp.lexer.Lexer;
 import com.example.graficadorapp.objetos.Figura;
-import com.example.graficadorapp.objetos.Graficador;
 import com.example.graficadorapp.parser.Parser;
+import com.example.graficadorapp.reportes.ErrorToken;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -35,8 +34,18 @@ public class FigurasActivity extends AppCompatActivity {
         try {
             parser.parse();
 
-            if (parser.getErrores()) {
-                System.out.println("Tiene errores no ejecutara nada");
+            System.out.println("ERROR: ");
+            if (parser.getErrorsList().size()>0) {
+                /*for(ErrorToken error: parser.getErrorsList()){
+                    System.out.println("Lexema: "+error.getLexeme()+" Linea: "+error.getLine()+" Columna: "+error.getColumn()+" Tipo "+error.getTipo()+" Descripcion: "+error.getDescripcion());
+                }*/
+                Intent reportErrors = new Intent(this,ReporteErrores.class);
+                Bundle bundle = new  Bundle();
+                bundle.putSerializable("listaErrores",parser.getErrorsList());
+                reportErrors.putExtra("Bundle",bundle);
+                startActivity(reportErrors);
+
+
             } else {
                 //parser.getGraficador().mostrarFiguras();
                 ArrayList<Figura> listaFiguras  = parser.getGraficador().getListaFiguras();
@@ -50,6 +59,14 @@ public class FigurasActivity extends AppCompatActivity {
 
         } catch (Exception ex) {
             System.out.println("Error irrecuperable " + ex);
+            for(ErrorToken error: parser.getErrorsList()){
+                System.out.println(">>>>> Lexema: "+error.getLexeme()+" Linea: "+error.getLine()+" Columna: "+error.getColumn()+" Tipo "+error.getTipo()+" Descripcion: "+error.getDescripcion());
+            }
+            Intent reportErrors = new Intent(this,ReporteErrores.class);
+            Bundle bundle = new  Bundle();
+            bundle.putSerializable("listaErrores",parser.getErrorsList());
+            reportErrors.putExtra("Bundle",bundle);
+            startActivity(reportErrors);
         }
 
 
