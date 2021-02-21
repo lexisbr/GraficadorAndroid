@@ -65,12 +65,17 @@ public class Dibujador extends View {
                // canvas.drawRect(x,y,forma.getAncho()+x,y+forma.getAlto(),pincel);
 
                 Path path = new Path();
-                path.moveTo(x,y);
-                float lado = (float) ((Math.PI / 2) / forma.getCantidad_lados());
+                float lado = (float) ((Math.PI * 2) / forma.getCantidad_lados());
+                System.out.println("X "+Math.cos(lado)+" Y "+Math.sin(lado));
+                float x_inicial = x + forma.getAncho();
+                float y_inicial = y;
+                path.moveTo(x_inicial,y_inicial);
 
 
-                for (int i =0; i< (forma.getCantidad_lados()-1); i++){
-                        path.lineTo(Float.parseFloat(String.valueOf(forma.getAncho() * Math.cos(lado*i)))+x, Float.parseFloat(String.valueOf(forma.getAlto() * Math.sin(lado*i)))+y);
+                for (int i =1; i< forma.getCantidad_lados(); i++){
+                        float x_1 = forma.getAncho() * (float) Math.cos(lado*i);
+                        float y_1 = forma.getAlto() * (float) Math.sin(lado*i);
+                        path.lineTo(x_1+x,y_1+y);
                 }
                 canvas.drawPath(path,pincel);
             }
