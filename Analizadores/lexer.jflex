@@ -174,8 +174,6 @@ CURVA = "curva"
 		{/*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_A, yytext());}
     {PARENTESIS_C}
 		{/*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_C, yytext());}
-    {PARENTESIS_A}
-		{/*System.out.printf(" PARENTESIS: %s\n", yytext());*/ return  symbol(PARENTESIS_A, yytext());}
     {CUADRADO}
 		{/*System.out.printf(" CUADRADO: %s\n", yytext());*/ addFigura(yytext()); return  symbol(CUADRADO, yytext());}
     {CIRCULO}

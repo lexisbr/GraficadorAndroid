@@ -69,10 +69,7 @@ public class FigurasActivity extends AppCompatActivity {
                 coloresList = lex.getColorsList();
                 figurasList = parser.getFigurasList();
                 animacionesList = parser.getAnimacionesList();
-
-                for(AnimacionReport figura: animacionesList){
-                    System.out.println("Animacion "+figura.getAnimacion()+" Cantidad "+figura.getContador());
-                }
+                
 
             }
 
