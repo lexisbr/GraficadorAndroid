@@ -10,7 +10,7 @@ import java.util.List;
 import java_cup.runtime.*;
 import com.example.graficadorapp.lexer.*;
 import com.example.graficadorapp.objetos.*;
-import com.example.graficadorapp.reportes.ErrorToken;
+import com.example.graficadorapp.reportes.*;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -211,7 +211,10 @@ public class Parser extends java_cup.runtime.lr_parser {
 
 
 
+    private ArrayList<OperadorReport> operadoresList = new ArrayList<>();
     private ArrayList<ErrorToken> errorsList = new ArrayList<>();
+    private ArrayList<FiguraReport> figuras;
+    private ArrayList<AnimacionReport> animaciones;
     private Animacion animacion;
     private Graficador graficador = new Graficador();
     private boolean errores=false;
@@ -219,22 +222,32 @@ public class Parser extends java_cup.runtime.lr_parser {
 	public Parser(Lexer lex) {
 		super(lex);
 		this.errorsList = lex.getErrorsList();
+        this.figuras = lex.getFigurasList();
+        this.animaciones = lex.getAnimacionesList();
 	}
 	@Override
     public void syntax_error(Symbol st) {
         Token error = (Token) st.value;
         report_error("Error Sintactico con el Token:"+ error.getLexeme()+" este no pertenece a la estructura  >linea: "+error.getLine()+" >columna: "+error.getColumn() + "\n",null);
-        for(String token: expected_token_ids()){
-            System.printf(">>> %s",token)
-        }
-       // error.setDescripcion("Error sintactico, este no pertence a la estructura");
-        //error.setTipo("Sintactico");
-       // errorsList.add(error);
-        //System.out.println("Error Sintactico con el Token: " + token.getLexeme() + " este no pertenece a la estructura - linea: " + token.getLine() + ", columna: " + token.getColumn());
+        ErrorToken errorF = new ErrorToken(error.getLexeme(),error.getLine(),error.getColumn(),"","Sintactico");
+        errorF.siguiente(expected_token_ids());
+        errorsList.add(errorF);
     }
 
     public ArrayList<ErrorToken> getErrorsList(){
         return errorsList;
+    }
+
+    public ArrayList<OperadorReport> getOperadoresList(){
+        return operadoresList;
+    }
+
+    public ArrayList<FiguraReport> getFigurasList(){
+        return figuras;
+    }
+
+    public ArrayList<AnimacionReport> getAnimacionesList(){
+        return animaciones;
     }
 
     public Graficador getGraficador(){
@@ -301,8 +314,7 @@ class CUP$Parser$actions {
 		int errleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int errright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object err = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		/* System.out.printf("Error sintacto %s",err); *//* ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba la palabra: \"graficar\" ","Sintactico");*/
-      /*errorsList.add(errs);*/
+		
       errores = true; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("inicio",0, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -438,6 +450,8 @@ class CUP$Parser$actions {
             /*System.out.printf("Graficar linea\n");*/
             Linea figura = new Linea(posx2,posy2,color.getLexeme(),posx,posy,animacion);
             graficador.addFigure(figura);
+            FiguraReport figuraC = (FiguraReport) figuras.get(3);
+            figuraC.setContador(figuraC.getContador()+1);
         
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("b",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-12)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -484,8 +498,7 @@ class CUP$Parser$actions {
 		int errleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int errright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object err = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		  /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una forma a graficar","Sintactico"); 
-            errorsList.add(error);*/
+		  
             errores = true; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("b",2, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -510,8 +523,7 @@ class CUP$Parser$actions {
 		int errleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int errright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object err = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		/* ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una operacion matematica valida","Sintactico"); 
-            errorsList.add(error);*/
+		
             errores = true; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("c",4, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -524,10 +536,15 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Integer e1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int e2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Integer e2 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		   RESULT = new Integer(e1.intValue()+e2.intValue()); /* System.out.printf("Resultado suma: %d\n",RESULT);*/ 
+		   RESULT = new Integer(e1.intValue()+e2.intValue());
+    operadoresList.add(new OperadorReport("Suma",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -539,10 +556,16 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Integer e1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int e2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Integer e2 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = new Integer(e1.intValue()-e2.intValue()); /* System.out.printf("Resultado resta: %d\n",RESULT);*/ 
+		 
+    RESULT = new Integer(e1.intValue()-e2.intValue());
+    operadoresList.add(new OperadorReport("Resta",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -554,10 +577,15 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Integer e1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int e2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Integer e2 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		  RESULT = new Integer(e1.intValue()*e2.intValue()); /* System.out.printf("Resultado multiplicacion: %d\n",RESULT);*/ 
+		  RESULT = new Integer(e1.intValue()*e2.intValue());
+    operadoresList.add(new OperadorReport("Multiplicacion",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -569,10 +597,15 @@ class CUP$Parser$actions {
 		int e1left = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).left;
 		int e1right = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)).right;
 		Integer e1 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
+		Token op = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
 		int e2left = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int e2right = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Integer e2 = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		  RESULT = new Integer(e1.intValue()/e2.intValue()); /* System.out.printf("Resultado division: %d\n",RESULT);*/ 
+		  RESULT = new Integer(e1.intValue()/e2.intValue());
+    operadoresList.add(new OperadorReport("Division",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-2)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;
@@ -608,8 +641,7 @@ class CUP$Parser$actions {
 		int errleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).left;
 		int errright = ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)).right;
 		Object err = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.elementAt(CUP$Parser$top-1)).value;
-		 /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una operacion matematica valida","Sintactico"); 
-            errorsList.add(error);*/
+		 
             errores = true; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("d",3, ((java_cup.runtime.Symbol)CUP$Parser$stack.elementAt(CUP$Parser$top-1)), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -667,8 +699,7 @@ class CUP$Parser$actions {
 		int errleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int errright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Object err = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una animacion valida","Sintactico"); 
-            errorsList.add(error);*/
+		
             errores = true; 
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("g",6, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
@@ -693,7 +724,10 @@ class CUP$Parser$actions {
 		int restleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int restright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
 		Token rest = (Token)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
-		 RESULT = rest; 
+		 RESULT = rest;
+        AnimacionReport animacion = (AnimacionReport) animaciones.get(0);
+        animacion.setContador(animacion.getContador()+1);
+     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("f",7, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
             }
           return CUP$Parser$result;

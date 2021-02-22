@@ -26,8 +26,6 @@ public class ReporteErrores extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("Bundle");
         errores = (ArrayList<ErrorToken>) bundle.getSerializable("listaErrores");
-      //  System.out.println("CANTIDAD DE ERRORES "+errores.size());
-      //  mostrarLista(errores);
         tableLayout = (TableLayout) findViewById(R.id.table);
         TablaDinamica tablaDinamica = new TablaDinamica(tableLayout,getApplicationContext());
         tablaDinamica.addHeader(header);
@@ -39,7 +37,6 @@ public class ReporteErrores extends AppCompatActivity {
 
     private ArrayList<String[]> getErrors(){
         for(ErrorToken error: errores){
-            System.out.println("Lexema: "+error.getLexeme()+" Linea: "+error.getLine()+" Columna: "+error.getColumn()+" Tipo "+error.getTipo()+" Descripcion: "+error.getDescripcion());
             rows.add(new String[]{error.getLexeme(),String.valueOf(error.getLine()),String.valueOf(error.getColumn()),error.getTipo(),error.getDescripcion()});
         }
         return rows;

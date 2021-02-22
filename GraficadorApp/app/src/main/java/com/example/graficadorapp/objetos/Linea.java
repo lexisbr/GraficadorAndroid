@@ -47,8 +47,5 @@ public class Linea extends Figura {
         System.out.printf("%s Color: %s Posicion X2: %d", TIPO, getColor(), getPosicion_x2());
     }
     
-    @Override
-    public Linea getFigura(){
-        return new Linea(getPosicion_x2(),getPosicion_x2(), getColor(), getPosicion_x(), getPosicion_y(), getAnimacion());
-    }
+
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import java_cup.runtime.*;
 import com.example.graficadorapp.lexer.*;
 import com.example.graficadorapp.objetos.*;
-import com.example.graficadorapp.reportes.ErrorToken;
+import com.example.graficadorapp.reportes.*;
 
 
 //agregar biblioteca cup como dependencia en android studio
@@ -13,7 +13,10 @@ import com.example.graficadorapp.reportes.ErrorToken;
 
 parser code {:
 
+    private ArrayList<OperadorReport> operadoresList = new ArrayList<>();
     private ArrayList<ErrorToken> errorsList = new ArrayList<>();
+    private ArrayList<FiguraReport> figuras;
+    private ArrayList<AnimacionReport> animaciones;
     private Animacion animacion;
     private Graficador graficador = new Graficador();
     private boolean errores=false;
@@ -21,6 +24,8 @@ parser code {:
 	public Parser(Lexer lex) {
 		super(lex);
 		this.errorsList = lex.getErrorsList();
+        this.figuras = lex.getFigurasList();
+        this.animaciones = lex.getAnimacionesList();
 	}
 	@Override
     public void syntax_error(Symbol st) {
@@ -33,6 +38,18 @@ parser code {:
 
     public ArrayList<ErrorToken> getErrorsList(){
         return errorsList;
+    }
+
+    public ArrayList<OperadorReport> getOperadoresList(){
+        return operadoresList;
+    }
+
+    public ArrayList<FiguraReport> getFigurasList(){
+        return figuras;
+    }
+
+    public ArrayList<AnimacionReport> getAnimacionesList(){
+        return animaciones;
     }
 
     public Graficador getGraficador(){
@@ -79,8 +96,7 @@ precedence left MULTI, DIVISION;
 
 start with inicio;
 inicio ::= a
-    | error:err a {:/* System.out.printf("Error sintacto %s",err); *//* ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba la palabra: \"graficar\" ","Sintactico");*/
-      /*errorsList.add(errs);*/
+    | error:err a {:
       errores = true; :}
 ;
 
@@ -106,31 +122,39 @@ b ::= CUADRADO PARENTESIS_A c:posx COMA c:posy COMA c:lon COMA COLOR:color PAREN
             /*System.out.printf("Graficar linea\n");*/
             Linea figura = new Linea(posx2,posy2,color.getLexeme(),posx,posy,animacion);
             graficador.addFigure(figura);
+            FiguraReport figuraC = (FiguraReport) figuras.get(3);
+            figuraC.setContador(figuraC.getContador()+1);
         :}
     | POLIGONO PARENTESIS_A c:posx COMA c:posy COMA c:alto COMA c:ancho COMA c:cantidad COMA COLOR:color PARENTESIS_C  e:animacion {:
             /*System.out.printf("Graficar poligono\n");*/
             Poligono figura = new Poligono(alto,ancho,cantidad,color.getLexeme(),posx,posy,animacion);
             graficador.addFigure(figura);
         :}
-    | error:err b {:  /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una forma a graficar","Sintactico"); 
-            errorsList.add(error);*/
+    | error:err b {:  
             errores = true; :}
 ;
 
 c ::= d:resultado {: RESULT = resultado; /*System.out.printf("Resultado FINAL: %d \n",resultado);*/ :}
-    | error:err {:/* ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una operacion matematica valida","Sintactico"); 
-            errorsList.add(error);*/
+    | error:err {:
             errores = true; :}
 ;
 
-d ::= d:e1 SUMA d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue()); /* System.out.printf("Resultado suma: %d\n",RESULT);*/ :}
-    | d:e1 RESTA d:e2 {: RESULT = new Integer(e1.intValue()-e2.intValue()); /* System.out.printf("Resultado resta: %d\n",RESULT);*/ :}
-    | d:e1 MULTI d:e2 {:  RESULT = new Integer(e1.intValue()*e2.intValue()); /* System.out.printf("Resultado multiplicacion: %d\n",RESULT);*/ :}
-    | d:e1 DIVISION d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue()); /* System.out.printf("Resultado division: %d\n",RESULT);*/ :}
+d ::= d:e1 SUMA:op d:e2 {:   RESULT = new Integer(e1.intValue()+e2.intValue());
+    operadoresList.add(new OperadorReport("Suma",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    :}
+    | d:e1 RESTA:op d:e2 {: 
+    RESULT = new Integer(e1.intValue()-e2.intValue());
+    operadoresList.add(new OperadorReport("Resta",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    :}
+    | d:e1 MULTI:op d:e2 {:  RESULT = new Integer(e1.intValue()*e2.intValue());
+    operadoresList.add(new OperadorReport("Multiplicacion",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    :}
+    | d:e1 DIVISION:op d:e2 {:  RESULT = new Integer(e1.intValue()/e2.intValue());
+    operadoresList.add(new OperadorReport("Division",op.getLine(),op.getColumn(),e1.toString()+op.getLexeme()+e2.toString()));
+    :}
     | ENTERO:e1 {:  RESULT = new Integer(Integer.parseInt(e1.getLexeme())); /*System.out.printf("Numero: %d\n",RESULT );*/ :}
     | PARENTESIS_A d:e1 PARENTESIS_C {: RESULT = e1; /*System.out.printf("Resultado parentesis: %d\n",RESULT );*/ :}
-    | error:err c {: /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una operacion matematica valida","Sintactico"); 
-            errorsList.add(error);*/
+    | error:err c {: 
             errores = true; :} 
 ;
 
@@ -145,12 +169,14 @@ e ::= ANIMAR g:anim {: RESULT = anim; /*System.out.printf("Se encontro una anima
 g ::= OBJETO ANTERIOR PARENTESIS_A c:destinox COMA c:destinoy COMA f:tipo PARENTESIS_C {:
         RESULT = new Animacion(destinox,destinoy,tipo.getLexeme());
     :}
-    | error:err {: /*ErrorToken error = new ErrorToken(err.getLexeme(),err.getLine(),err.getColumn(),"Se esperaba una animacion valida","Sintactico"); 
-            errorsList.add(error);*/
+    | error:err {:
             errores = true; :}
 ;
 
 f  ::= CURVA:rest {: RESULT = rest; :}
-    | LINEA:rest {: RESULT = rest; :}
+    | LINEA:rest {: RESULT = rest;
+        AnimacionReport animacion = (AnimacionReport) animaciones.get(0);
+        animacion.setContador(animacion.getContador()+1);
+     :}
 ;
 

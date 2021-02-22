@@ -97,7 +97,7 @@ public class TablaDinamica {
 
     private TableRow.LayoutParams newTableRowParams(){
         TableRow.LayoutParams params = new TableRow.LayoutParams();
-        params.setMargins(2,2,2,2);
+        params.setMargins(3,3,3,3);
         params.weight=1;
         return params;
     }
@@ -108,7 +108,6 @@ public class TablaDinamica {
             newRow();
             for(indexC=0;indexC<header.length;indexC++ ){
                 newCell();
-                System.out.println("HAsta aca-");
                 String[] columns=data.get(indexR-1);
                 info = (indexC < columns.length)?columns[indexC]:"";
                 txtCell.setText(info);

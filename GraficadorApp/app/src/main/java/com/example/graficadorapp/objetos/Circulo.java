@@ -37,8 +37,5 @@ public class Circulo extends Figura {
         System.out.printf("%s Color: %s Radio: %d",TIPO,getColor(),getRadio());
     }
     
-    @Override
-    public Circulo getFigura(){
-        return new Circulo(getRadio(),getColor(), getPosicion_x(), getPosicion_y(), getAnimacion());
-    }
+
 }

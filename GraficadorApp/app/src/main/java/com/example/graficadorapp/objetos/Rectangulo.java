@@ -46,10 +46,6 @@ public class Rectangulo extends Figura {
     public void mostrarDatos() {
         System.out.printf("%s Color: %s Alto: %d", TIPO, getColor(), getAlto());
     }
-    
-    @Override
-    public Rectangulo getFigura(){
-        return new Rectangulo(getAlto(), getAncho(), getTIPO(), getPosicion_x(), getPosicion_y(), getAnimacion());
-    }
+
 
 }

@@ -37,9 +37,6 @@ public class Cuadrado extends Figura {
         System.out.printf("%s Color: %s Longitud lado: %d", TIPO, getColor(), getLongitud_lado());
     }
     
-    @Override
-    public Cuadrado getFigura(){
-        return new Cuadrado(getLongitud_lado(), getColor(), getPosicion_x(), getPosicion_y(), getAnimacion());
-    }
+
 
 }

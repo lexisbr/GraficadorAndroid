@@ -57,8 +57,6 @@ public class Poligono extends Figura {
         System.out.printf("%s Color: %s Lados: %d", TIPO, getColor(), getCantidad_lados());
     }
     
-    public Poligono getFigura(){
-        return new Poligono(getAlto(), getAncho(), getCantidad_lados(), getColor(), getPosicion_x(), getPosicion_y(), getAnimacion());
-    }
+
 
 }

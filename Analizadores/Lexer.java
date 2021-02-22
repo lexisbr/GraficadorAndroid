@@ -8,7 +8,7 @@ import java.util.List;
 import java_cup.runtime.*;
 import com.example.graficadorapp.parser.sym;
 import static com.example.graficadorapp.parser.sym.*;
-import com.example.graficadorapp.reportes.ErrorToken;
+import com.example.graficadorapp.reportes.*;
 
 
 
@@ -325,6 +325,10 @@ public class Lexer implements java_cup.runtime.Scanner {
   /* user code: */
 
 	private ArrayList<ErrorToken> errorsList = new ArrayList<>();
+  private ArrayList<ColorReport> colores = new ArrayList<>();
+  private ArrayList<FiguraReport> figuras = new ArrayList<>();
+  private ArrayList<AnimacionReport> animaciones = new ArrayList<>();
+
 	private Symbol symbol(int type) {
         String lexeme = yytext();
         //System.out.printf("Token tipo %d, lexeme %s, en linea %d, columna %d\n", type, lexeme == null ? "" : lexeme, yyline + 1, yycolumn + 1);
@@ -346,6 +350,77 @@ public class Lexer implements java_cup.runtime.Scanner {
         return errorsList;
     }
 
+    public void addColor(String lexeme){
+      if(lexeme.equals("azul")){
+        ColorReport color = (ColorReport) colores.get(0); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("rojo")){
+        ColorReport color = (ColorReport) colores.get(1); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("verde")){
+        ColorReport color = (ColorReport) colores.get(2); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("amarillo")){
+        ColorReport color = (ColorReport) colores.get(3); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("naranja")){
+        ColorReport color = (ColorReport) colores.get(4); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("morado")){
+        ColorReport color = (ColorReport) colores.get(5); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("cafe")){
+        ColorReport color = (ColorReport) colores.get(6); 
+        color.setContador(color.getContador()+1);
+      }else if(lexeme.equals("negro")){
+        ColorReport color = (ColorReport) colores.get(7); 
+        color.setContador(color.getContador()+1);
+      }
+    }
+
+    public void addFigura(String lexeme){
+      if(lexeme.equals("circulo")){
+        FiguraReport figura = (FiguraReport) figuras.get(0);
+        figura.setContador(figura.getContador()+1);
+      } else if(lexeme.equals("cuadrado")){
+        FiguraReport figura = (FiguraReport) figuras.get(1);
+        figura.setContador(figura.getContador()+1);
+      } else if(lexeme.equals("rectangulo")){
+        FiguraReport figura = (FiguraReport) figuras.get(2);
+        figura.setContador(figura.getContador()+1);
+      }else if(lexeme.equals("linea")){
+        FiguraReport figura = (FiguraReport) figuras.get(3);
+        figura.setContador(figura.getContador()+1);
+      }else if(lexeme.equals("poligono")){
+        FiguraReport figura = (FiguraReport) figuras.get(4);
+        figura.setContador(figura.getContador()+1);
+      }
+
+    }
+
+    public void addAnimacion(String lexeme){
+       if(lexeme.equals("linea")){
+        AnimacionReport animacion = (AnimacionReport) animaciones.get(0);
+        animacion.setContador(animacion.getContador()+1);
+      } else if(lexeme.equals("curva")){
+        AnimacionReport animacion = (AnimacionReport) animaciones.get(1);
+        animacion.setContador(animacion.getContador()+1);
+      } 
+
+    }
+
+    public ArrayList<ColorReport> getColorsList(){
+      return colores;
+    }
+
+    public ArrayList<FiguraReport> getFigurasList(){
+      return figuras;
+    }
+
+    public ArrayList<AnimacionReport> getAnimacionesList(){
+      return animaciones;
+    }
+
 
 
 
@@ -355,6 +430,23 @@ public class Lexer implements java_cup.runtime.Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public Lexer(java.io.Reader in) {
+          colores.add( new ColorReport("Azul",0));
+        colores.add( new ColorReport("Rojo",0));
+        colores.add( new ColorReport("Verde",0));
+        colores.add( new ColorReport("Amarillo",0));
+        colores.add( new ColorReport("Naranja",0));
+        colores.add( new ColorReport("Morado",0));
+        colores.add( new ColorReport("Cafe",0));
+        colores.add( new ColorReport("Negro",0));
+
+        figuras.add( new FiguraReport("Circulo",0));
+        figuras.add( new FiguraReport("Cuadrado",0));
+        figuras.add( new FiguraReport("Rectangulo",0));
+        figuras.add( new FiguraReport("Linea",0));
+        figuras.add( new FiguraReport("Poligono",0));
+
+        animaciones.add( new AnimacionReport("Linea",0));
+        animaciones.add( new AnimacionReport("Curva",0));
     this.zzReader = in;
   }
 
@@ -807,17 +899,17 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 31: break;
           case 11:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(COLOR, yytext());
+            { /*System.out.printf(" COLOR: %s\n", yytext());*/ addColor(yytext()); return  symbol(COLOR, yytext());
             }
             // fall through
           case 32: break;
           case 12:
-            { /*System.out.printf(" COLOR: %s\n", yytext());*/ return  symbol(CURVA, yytext());
+            { /*System.out.printf(" COLOR: %s\n", yytext());*/ addAnimacion(yytext()); return  symbol(CURVA, yytext());
             }
             // fall through
           case 33: break;
           case 13:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(LINEA, yytext());
+            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/  return  symbol(LINEA, yytext());
             }
             // fall through
           case 34: break;
@@ -832,7 +924,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 36: break;
           case 16:
-            { /*System.out.printf(" CIRCULO: %s\n", yytext());*/ return  symbol(CIRCULO, yytext());
+            { /*System.out.printf(" CIRCULO: %s\n", yytext());*/ addFigura(yytext()); return  symbol(CIRCULO, yytext());
             }
             // fall through
           case 37: break;
@@ -842,7 +934,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 38: break;
           case 18:
-            { /*System.out.printf(" CUADRADO: %s\n", yytext());*/ return  symbol(CUADRADO, yytext());
+            { /*System.out.printf(" CUADRADO: %s\n", yytext());*/ addFigura(yytext()); return  symbol(CUADRADO, yytext());
             }
             // fall through
           case 39: break;
@@ -852,12 +944,12 @@ public class Lexer implements java_cup.runtime.Scanner {
             // fall through
           case 40: break;
           case 20:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(POLIGONO, yytext());
+            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ addFigura(yytext()); return  symbol(POLIGONO, yytext());
             }
             // fall through
           case 41: break;
           case 21:
-            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/ return  symbol(RECTANGULO, yytext());
+            { /*System.out.printf(" RECTANGULO: %s\n", yytext());*/  addFigura(yytext()); return  symbol(RECTANGULO, yytext());
             }
             // fall through
           case 42: break;

@@ -5,4 +5,15 @@
     android:id="@+id/layoutFiguras"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FigurasActivity" />
+    tools:context=".FigurasActivity" >
+
+    <Button
+        android:id="@+id/reportesButton"
+        android:layout_width="122dp"
+        android:layout_height="50dp"
+        android:onClick="iniciarReportes"
+        android:text="Reportes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

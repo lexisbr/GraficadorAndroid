@@ -9,7 +9,7 @@ package com.example.graficadorapp.objetos;
  *
  * @author lex
  */
-public abstract class Figura {
+public class Figura {
     private String TIPO;
     private String color;
     private int posicion_x;
@@ -63,7 +63,7 @@ public abstract class Figura {
         System.out.println("Figura");
     }
     
-    public abstract Figura getFigura(); 
+
    
     
 }

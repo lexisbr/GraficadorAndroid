@@ -5,18 +5,28 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.graficadorapp.herramientas.Dibujador;
 import com.example.graficadorapp.lexer.Lexer;
 import com.example.graficadorapp.objetos.Figura;
 import com.example.graficadorapp.parser.Parser;
+import com.example.graficadorapp.reportes.AnimacionReport;
+import com.example.graficadorapp.reportes.ColorReport;
 import com.example.graficadorapp.reportes.ErrorToken;
+import com.example.graficadorapp.reportes.FiguraReport;
+import com.example.graficadorapp.reportes.OperadorReport;
 
 import java.io.StringReader;
 import java.util.ArrayList;
 
 public class FigurasActivity extends AppCompatActivity {
 
+
+    private ArrayList<OperadorReport> operadoresList;
+    private ArrayList<ColorReport> coloresList;
+    private ArrayList<FiguraReport> figurasList;
+    private ArrayList<AnimacionReport> animacionesList;
 
 
     @Override
@@ -27,7 +37,7 @@ public class FigurasActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String codigoFuente = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
         StringReader reader = new StringReader(codigoFuente);
-    
+
         Lexer lex = new Lexer(reader);
         Parser parser = new Parser(lex);
 
@@ -55,13 +65,19 @@ public class FigurasActivity extends AppCompatActivity {
                 dibujador.mostrarFiguras();
                 layout.addView(dibujador);
 
+                operadoresList = parser.getOperadoresList();
+                coloresList = lex.getColorsList();
+                figurasList = parser.getFigurasList();
+                animacionesList = parser.getAnimacionesList();
+
+                for(AnimacionReport figura: animacionesList){
+                    System.out.println("Animacion "+figura.getAnimacion()+" Cantidad "+figura.getContador());
+                }
+
             }
 
         } catch (Exception ex) {
             System.out.println("Error irrecuperable " + ex);
-            for(ErrorToken error: parser.getErrorsList()){
-                System.out.println(">>>>> Lexema: "+error.getLexeme()+" Linea: "+error.getLine()+" Columna: "+error.getColumn()+" Tipo "+error.getTipo()+" Descripcion: "+error.getDescripcion());
-            }
             Intent reportErrors = new Intent(this,ReporteErrores.class);
             Bundle bundle = new  Bundle();
             bundle.putSerializable("listaErrores",parser.getErrorsList());
@@ -71,6 +87,17 @@ public class FigurasActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void iniciarReportes(View view){
+        Intent reportes = new Intent(this,ReportesActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("operadoresList",operadoresList);
+        bundle.putSerializable("coloresList",coloresList);
+        bundle.putSerializable("figurasList",figurasList);
+        bundle.putSerializable("animacionesList",animacionesList);
+        reportes.putExtra("bundle",bundle);
+        startActivity(reportes);
     }
 
 
